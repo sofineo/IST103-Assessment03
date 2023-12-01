@@ -1,6 +1,34 @@
 // JS Script File
 
+const navigate = window.navigator
+
 window.addEventListener('load', () => {
+
+    // SignIn with Email
+    document.getElementById('sign-in-traditional').addEventListener('click', () => {
+
+      console.log('=====> SignIn button clicked');
+  
+      const emailTxt = document.getElementById('account_email').value;
+      const passTxt = document.getElementById('account_passwd').value;
+  
+  
+      firebase.auth().signInWithEmailAndPassword(emailTxt, passTxt)
+      .then((userCredential) => {
+        // Signed in
+        var user = userCredential.user;
+        // ...
+        console.log('Logging successfully')
+        window.location.href = '../../public/home.html';
+        
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log('Logging fail', error)
+        alert('Email or password incorrect')
+    });
+    })
 
   // SignIn with Google
   document.getElementById('sign-in-google').addEventListener('click', function() {
@@ -18,30 +46,11 @@ window.addEventListener('load', () => {
 
   });
 
-  // SignIn with Email
-  document.getElementById('sign-in-traditional').addEventListener('click', () => {
-
-    const emailTxt = document.getElementById('email').value;
-    const passTxt = document.getElementById('password').value;
-
-    firebase.auth().signInWithEmailAndPassword(emailTxt, passTxt)
-    .then((userCredential) => {
-      // Signed in
-      var user = userCredential.user;
-      // ...
-      console.log('Logging successfully')
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log('Logging fail', error)
-  });
-  })
-
   // SignIn by Phone
   function getPhoneNumberFromUserInput() {
     //no space in the phone number
-    return "+16043135373"
+    const number = prompt('Type the phone number here')
+    return number
   };
 
   function getCodeFromUserInput() {
@@ -52,8 +61,8 @@ window.addEventListener('load', () => {
 
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
 
-    const phoneNumber = getPhoneNumberFromUserInput();
     const appVerifier = window.recaptchaVerifier;
+    const phoneNumber = getPhoneNumberFromUserInput();
     firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
         .then((confirmationResult) => {
           // SMS sent. Prompt user to type the code from the message, then sign the
