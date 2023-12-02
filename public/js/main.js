@@ -19,7 +19,6 @@ window.addEventListener('load', () => {
         var user = userCredential.user;
         // ...
         console.log('Logging successfully')
-        window.location.href = '../../public/home.html';
         
       })
       .catch((error) => {
